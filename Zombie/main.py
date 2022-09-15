@@ -1,5 +1,6 @@
 import pygame
 from objects.BackGround import BackGround
+from objects.Hole import Hole
 pygame.init()
   
 # CREATING CANVAS
@@ -9,14 +10,17 @@ canvas = pygame.display.set_mode((940, 528))
 pygame.display.set_caption("Zombie")
 exit = False
 #Load Image
-bg = pygame.image.load("Zombie/assets/backGround.png")
-
+bgImg = pygame.image.load("Zombie/assets/backGround.png")
+holeImg = pygame.image.load("Zombie/assets/hole.png")
 #CREATE OBJECTS
-backGround = BackGround(bg, 0, 0, 1)
+backGround = BackGround(bgImg, 0, 0, 1)
+matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+hole = Hole(120, 120, matrix, 150, holeImg, (100, 100))
 #GAME LOOP  
 while not exit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit = True
-    backGround.display(canvas)        
+    backGround.display(canvas)
+    hole.display(canvas)        
     pygame.display.update()
