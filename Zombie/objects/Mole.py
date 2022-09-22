@@ -2,7 +2,7 @@ import pygame
 from enum import Enum
 
 class Constant:
-    SPEED_DIE = 3
+    SPEED_DIE = 20
     SPEED_STAND = 100
 
 class MoleAnimation(Enum):
@@ -12,7 +12,7 @@ class MoleAnimation(Enum):
     DIE = 3
     STAND = 4
 
-class Mole:   
+class Mole(pygame.sprite.Sprite):   
  
     def __init__(self, pos_x, pos_y, animation = MoleAnimation.NONE) -> None:
         super(Mole, self).__init__()
@@ -30,45 +30,49 @@ class Mole:
         self.die_frames = []
         self.die_idx = 0
         for i in range(1,5):
-            self.up_frames.append(pygame.transform.scale(pygame.image.load('assets/die_' + str(i) + '.png'), (90,120)))
+            self.die_frames.append(pygame.transform.scale(pygame.image.load('assets/die_' + str(i) + '.png'), (90,120)))
             
         self.stand_frame = pygame.transform.scale(pygame.image.load('assets/up_10.png'), (90,120)) 
         self.stand_idx = 0
         
+        self.rect_surround = None
+        
     def display(self, screen: pygame.Surface):
         match(self.animation):
             case MoleAnimation.NONE: 
+                self.rect_surround = None
                 self.up_idx = self.down_idx = self.die_idx = self.stand_idx = 0
             
             case MoleAnimation.UP:
+                self.down_idx = self.die_idx = self.stand_idx = 0
                 if self.up_idx >= len(self.up_frames):
-                    self.up_idx = 0
                     self.animation = MoleAnimation.STAND
-                    screen.blit(self.stand_frame, (self.X, self.Y))
+                    self.rect_surround = screen.blit(self.stand_frame, (self.X, self.Y))                  
                 else:
-                    screen.blit(self.up_frames[self.up_idx], ((self.X, self.Y)))
+                    self.rect_surround = screen.blit(self.up_frames[self.up_idx], ((self.X, self.Y)))
                     self.up_idx += 1
                 
             case MoleAnimation.DOWN:
+                self.up_idx = self.die_idx = self.stand_idx = 0
                 if self.down_idx >= len(self.down_frames):
-                    self.down_idx = 0
                     self.animation = MoleAnimation.NONE
                 else:
-                    screen.blit(self.down_frames[self.down_idx], ((self.X, self.Y)))
+                    self.rect_surround = screen.blit(self.down_frames[self.down_idx], ((self.X, self.Y)))
                     self.down_idx += 1
             
             case MoleAnimation.DIE:
+                self.rect_surround = None
+                self.up_idx = self.down_idx = self.stand_idx = 0
                 if self.die_idx >= len(self.die_frames) * Constant.SPEED_DIE:
-                    self.die_idx = 0
                     self.animation = MoleAnimation.NONE
                 else:
-                    screen.blit(self.die_frames[self.die_idx % Constant.SPEED_DIE], ((self.X, self.Y)))
+                    screen.blit(self.die_frames[int(self.die_idx / Constant.SPEED_DIE)], ((self.X, self.Y)))
                     self.die_idx += 1
                 
             case MoleAnimation.STAND:
+                self.up_idx = self.down_idx = self.die_idx = 0
                 if self.stand_idx >= Constant.SPEED_STAND:
-                    self.stand_idx = 0
                     self.animation = MoleAnimation.DOWN
                 else:
-                    screen.blit(self.stand_frame, ((self.X, self.Y)))
+                    self.rect_surround = screen.blit(self.stand_frame, ((self.X, self.Y)))
                     self.stand_idx += 1       

@@ -7,7 +7,7 @@ class Hammer:
         self.rotation = 0
         self.audio = audio
         self.size = (100, 100)
-        pass
+        
 
     def display(self, screen: pygame.Surface) -> None:
         (x, y) = pygame.mouse.get_pos()

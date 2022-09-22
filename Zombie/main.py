@@ -15,7 +15,7 @@ mixer.init()
 canvas = pygame.display.set_mode((940, 528))
   
 # TITLE OF CANVAS
-pygame.display.set_caption("Zombie")
+pygame.display.set_caption("Whack a mole")
 exit = False
 
 #Load Image
@@ -55,8 +55,11 @@ endTick = 0
 startMoleTick = pygame.time.get_ticks()
 endMoleTick = startMoleTick
 
+score = 0
+
 while not exit:
-        
+    
+    
     endMoleTick = pygame.time.get_ticks()
     if endMoleTick - startMoleTick > 700:
         current_mole_up = []
@@ -64,12 +67,13 @@ while not exit:
         for i in range(len(moles)):
             if moles[i].animation != MoleAnimation.NONE:
                 current_mole_up.append(i)
-
+            
         if len(current_mole_up) <= 3:
-            new_up = random.choice(list(range(len(moles))))
+            new_up = random.choice(list(range(len(moles))))           
             
             if new_up not in current_mole_up:
                 moles[new_up].animation = MoleAnimation.UP
+                current_mole_up.append(new_up)
                 
         startMoleTick = endMoleTick
                     
@@ -81,6 +85,24 @@ while not exit:
             startTick = pygame.time.get_ticks()
             hammer.hit(0, 0)
             hammer.changeAnimation()
+            
+            current_mole_up = []
+            
+            for i in range(len(moles)):
+                if moles[i].animation != MoleAnimation.NONE and moles[i].animation != MoleAnimation.DIE:
+                    current_mole_up.append(i)
+                    
+            pos = pygame.mouse.get_pos()
+
+            for moleIdx in current_mole_up:
+                if moles[moleIdx].rect_surround != None and moles[moleIdx].rect_surround.collidepoint(pos):
+                    moles[moleIdx].animation = MoleAnimation.DIE
+                    score +=1
+                    print(current_mole_up)
+                    print("score: ",score," pos: ", moleIdx)
+                    print("--------------------------------------------------------")
+            
+            
             
     endTick = pygame.time.get_ticks()
     
