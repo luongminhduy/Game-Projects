@@ -55,8 +55,6 @@ endTick = 0
 startMoleTick = pygame.time.get_ticks()
 endMoleTick = startMoleTick
 
-score = 0
-
 while not exit:
     
     
@@ -97,9 +95,11 @@ while not exit:
             for moleIdx in current_mole_up:
                 if moles[moleIdx].rect_surround != None and moles[moleIdx].rect_surround.collidepoint(pos):
                     moles[moleIdx].animation = MoleAnimation.DIE
-                    score +=1
+
                     print(current_mole_up)
-                    print("score: ",score," pos: ", moleIdx)
+                    print("score: ",Mole.death," pos: ", moleIdx)
+                    print("--------------------------------------------------------")
+                    print("miss: ",Mole.alive)
                     print("--------------------------------------------------------")
             
             

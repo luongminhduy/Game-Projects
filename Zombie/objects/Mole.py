@@ -12,7 +12,9 @@ class MoleAnimation(Enum):
     DIE = 3
     STAND = 4
 
-class Mole(pygame.sprite.Sprite):   
+class Mole(pygame.sprite.Sprite):
+    alive = 0
+    death = 0   
  
     def __init__(self, pos_x, pos_y, animation = MoleAnimation.NONE) -> None:
         super(Mole, self).__init__()
@@ -56,6 +58,7 @@ class Mole(pygame.sprite.Sprite):
                 self.up_idx = self.die_idx = self.stand_idx = 0
                 if self.down_idx >= len(self.down_frames):
                     self.animation = MoleAnimation.NONE
+                    Mole.alive += 1
                 else:
                     self.rect_surround = screen.blit(self.down_frames[self.down_idx], ((self.X, self.Y)))
                     self.down_idx += 1
@@ -64,6 +67,7 @@ class Mole(pygame.sprite.Sprite):
                 self.rect_surround = None
                 self.up_idx = self.down_idx = self.stand_idx = 0
                 if self.die_idx >= len(self.die_frames) * Constant.SPEED_DIE:
+                    Mole.death += 1
                     self.animation = MoleAnimation.NONE
                 else:
                     screen.blit(self.die_frames[int(self.die_idx / Constant.SPEED_DIE)], ((self.X, self.Y)))
