@@ -1,6 +1,10 @@
 import pygame
 from enum import Enum
 
+class Constant:
+    SPEED_DIE = 3
+    SPEED_STAND = 100
+
 class MoleAnimation(Enum):
     NONE = 0
     UP = 1
@@ -54,15 +58,15 @@ class Mole:
                     self.down_idx += 1
             
             case MoleAnimation.DIE:
-                if self.die_idx >= len(self.die_frames):
+                if self.die_idx >= len(self.die_frames) * Constant.SPEED_DIE:
                     self.die_idx = 0
                     self.animation = MoleAnimation.NONE
                 else:
-                    screen.blit(self.die_frames[self.die_idx], ((self.X, self.Y)))
+                    screen.blit(self.die_frames[self.die_idx % Constant.SPEED_DIE], ((self.X, self.Y)))
                     self.die_idx += 1
                 
             case MoleAnimation.STAND:
-                if self.stand_idx >= 100:
+                if self.stand_idx >= Constant.SPEED_STAND:
                     self.stand_idx = 0
                     self.animation = MoleAnimation.DOWN
                 else:
