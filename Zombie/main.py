@@ -28,6 +28,7 @@ hit = pygame.mixer.Sound("assets/audio/hit.wav")
 music = pygame.mixer.Sound("assets/audio/music.mp3")
 music.set_volume(0.3)
 dieAudio = pygame.mixer.Sound("assets/audio/die.wav")
+gameOverAudio = pygame.mixer.Sound("assets/audio/game-over.wav")
 #CREATE OBJECTS
 backGround = BackGround(bgImg, 0, 0, 1)
 matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
@@ -55,7 +56,7 @@ endTick = 0
 
 startMoleTick = pygame.time.get_ticks()
 endMoleTick = startMoleTick
-
+gameEnd = False
 while not exit:
     
     endMoleTick = pygame.time.get_ticks()
@@ -121,5 +122,17 @@ while not exit:
     label = myfont.render("Score: " + str(Mole.death), 30, 100, (255,255,0))
     missed = myfont.render("Miss: " + str(Mole.alive), 30, 100, (255,255,0))
     canvas.blit(label, (200, 40))
-    canvas.blit(missed, (600, 40))      
-    pygame.display.update()
+    canvas.blit(missed, (600, 40))
+    if (Mole.alive == 10):
+        gameOver = myfont.render("Game Over", 30, 100, (255,255,0))
+        canvas.blit(gameOver, (390, 200))
+        pygame.mixer.Sound.stop(hit)
+        pygame.mixer.Sound.stop(music)
+        pygame.mixer.Sound.stop(dieAudio)
+        pygame.mixer.Sound.play(gameOverAudio, 0)
+    if Mole.alive == 11:
+        gameEnd = True
+    if (pygame.mixer.get_busy() == False):
+        exit = True
+    if (gameEnd == False):
+        pygame.display.update()
