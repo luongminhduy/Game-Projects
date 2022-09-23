@@ -1,6 +1,7 @@
 import random
 from secrets import choice
 from tracemalloc import start
+from xml.etree.ElementTree import tostring
 import pygame
 from pygame import mixer
 #from Zombie.objects.Hammer import Hammer
@@ -22,17 +23,17 @@ exit = False
 bgImg = pygame.image.load("assets/backGround.png")
 holeImg = pygame.image.load("assets/hole.png")
 hammerImg = pygame.image.load("assets/hammer_3.png")
-
 #Load Audio
 hit = pygame.mixer.Sound("assets/audio/hit.wav")
 music = pygame.mixer.Sound("assets/audio/music.mp3")
 music.set_volume(0.3)
+dieAudio = pygame.mixer.Sound("assets/audio/die.wav")
 #CREATE OBJECTS
 backGround = BackGround(bgImg, 0, 0, 1)
 matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 hole = Hole(120, 120, matrix, 150, holeImg, (100, 100))
 hammer = Hammer(hammerImg, 10, hit)
-
+myfont = pygame.font.SysFont("monospace", 30)
 moles = []
 i = 0
 j = 0
@@ -56,7 +57,6 @@ startMoleTick = pygame.time.get_ticks()
 endMoleTick = startMoleTick
 
 while not exit:
-    
     
     endMoleTick = pygame.time.get_ticks()
     if endMoleTick - startMoleTick > 700:
@@ -95,6 +95,7 @@ while not exit:
             for moleIdx in current_mole_up:
                 if moles[moleIdx].rect_surround != None and moles[moleIdx].rect_surround.collidepoint(pos):
                     moles[moleIdx].animation = MoleAnimation.DIE
+                    pygame.mixer.Sound.play(dieAudio)
 
                     print(current_mole_up)
                     print("score: ",Mole.death," pos: ", moleIdx)
@@ -117,5 +118,8 @@ while not exit:
     for mole in moles:
         mole.display(canvas)   
     hammer.display(canvas)
-           
+    label = myfont.render("Score: " + str(Mole.death), 30, 100, (255,255,0))
+    missed = myfont.render("Miss: " + str(Mole.alive), 30, 100, (255,255,0))
+    canvas.blit(label, (200, 40))
+    canvas.blit(missed, (600, 40))      
     pygame.display.update()

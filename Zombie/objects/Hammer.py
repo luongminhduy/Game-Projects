@@ -11,7 +11,7 @@ class Hammer:
 
     def display(self, screen: pygame.Surface) -> None:
         (x, y) = pygame.mouse.get_pos()
-        screen.blit(pygame.transform.scale(self.sprite, self.size), (x - 90, y - 90))
+        screen.blit(pygame.transform.scale(self.sprite, self.size), (x - 50, y - 50))
 
     def hit(self, x, y):
         self.attack = True
