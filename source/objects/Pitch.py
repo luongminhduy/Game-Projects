@@ -2,8 +2,6 @@ from typing import Literal
 import pygame
 
 from interface.AbstractPitch import AbstractPitch
-from physics.Body import Body
-from shapes.Rectangle import Rectangle
 
 class Pitch(AbstractPitch):
     def __init__(self, image: pygame.Surface, position: tuple[Literal[0], Literal[0]]) -> None:

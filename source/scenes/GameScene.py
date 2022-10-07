@@ -80,6 +80,8 @@ class GameScene(BaseScene):
     def exit(self):
         print("exit GameScene")
         self.screen.fill(WHITE)
+        self.blueTeam.clear()
+        self.redTeam.clear()
     
 
     def __load(self):
