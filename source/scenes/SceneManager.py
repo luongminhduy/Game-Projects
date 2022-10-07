@@ -12,6 +12,7 @@ class SceneManager:
 
     def setCurrentScene(self, key):
         self.currentScene = self.sceneList[key]
+        self.currentScene.start()
         
     def getCurrentScene(self):
         return self.currentScene
@@ -23,6 +24,7 @@ class SceneManager:
         if self.nextScene:
             self.currentScene.exit()
             self.currentScene = self.nextScene
+            self.currentScene.start()
             self.nextScene = None
 
     def printSceneList(self):

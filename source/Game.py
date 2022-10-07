@@ -3,6 +3,8 @@ from pygame.locals import *
 import time
 
 from scenes.SceneManager import SceneManager
+from utilities.constant import WHITE
+
 
 ##
 # config: dictionary
@@ -67,7 +69,10 @@ class Game:
         pygame.display.update()
 
     def __endFrame(self):
-        pass
+        self.sceneManager.getCurrentScene().screen.fill(WHITE)
+        world = self.sceneManager.getCurrentScene().world
+        if world:
+            world.Step(1/self.fps, 10, 10)
 
     def __setUp(self):
         pygame.init()
