@@ -1,23 +1,10 @@
 import pygame, sys
 from pygame.locals import *
 import time
+from pygame import mixer
 
 from scenes.SceneManager import SceneManager
 from utilities.constant import WHITE
-
-
-##
-# config: dictionary
-#   {
-#       width: num,
-#       height: num,
-#       fps: num,
-#       scenes: list,
-#       startScene: str,
-#       windowCaption: str,
-#       background: tuple
-#   }
-#
 
 class Game:
     def __init__(self, config) -> None:
@@ -33,7 +20,7 @@ class Game:
         # self.currentScene = None
         self.sceneManager = None
         self.screen = None
-
+    
     def run(self):
         self.__setUp()
         lastFrameTime = time.time()
@@ -42,7 +29,6 @@ class Game:
             deltaTime = time.time() - lastFrameTime
             lastFrameTime = time.time()
             
-            # print(deltaTime)
             self.__handleEvent()
             self.__update(deltaTime)
             self.__render()
@@ -76,6 +62,7 @@ class Game:
 
     def __setUp(self):
         pygame.init()
+        mixer.init()
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption(self.windowCaption)
         self.clock = pygame.time.Clock()

@@ -1,7 +1,7 @@
 import pygame
 from scenes.BaseScene import BaseScene
 from utilities.constant import *
-
+from pygame import mixer
 
 class MenuScene(BaseScene):
     def __init__(self, screen: pygame.Surface, sceneManager) -> None:
@@ -14,8 +14,10 @@ class MenuScene(BaseScene):
     def processInput(self, events, pressedKeys):
         super().processInput(events, pressedKeys)
         for event in events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
-                self.sceneManager.startScene("GameScene")
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                if self.button.get_rect(topleft = (WINDOW_WIDTH * 0.35, WINDOW_HEIGHT * 0.4)).collidepoint(x, y):
+                    self.sceneManager.startScene("GameScene")
 
     def start(self):
         pass
@@ -24,16 +26,18 @@ class MenuScene(BaseScene):
         pass
 
     def render(self):
-        self.screen.blit(self.titleSurf, self.titleRect)      
+        self.screen.blit(self.firstimage, (-500, 0))  
+        self.screen.blit(self.button, (WINDOW_WIDTH * 0.35, WINDOW_HEIGHT * 0.4))      
 
     def exit(self):
         print("exit MenuScene")
 
     def __load(self):
-        self.titleFont = pygame.font.Font('freesansbold.ttf', 32)
-        self.titleSurf = self.titleFont.render('Mini Football, press 0 to change scene!', True, GREEN)
-        self.titleRect = self.titleSurf.get_rect()
-        self.titleRect.center = (WINDOW_WIDTH * 0.5, WINDOW_HEIGHT * 0.5)
+        self.button = pygame.image.load("assets/images/button.png")
+        self.firstimage = pygame.image.load("assets/images/first.png")
+        theme = mixer.Sound("assets/sounds/theme.wav")
+        theme.set_volume(0.3)
+        mixer.Sound.play(theme, -1)
 
         
         
