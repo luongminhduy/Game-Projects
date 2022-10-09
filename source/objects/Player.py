@@ -15,8 +15,9 @@ class Player(AbstractPlayer):
         self.position = pygame.math.Vector2(position)
         self.radius = 25
         self.degree = 0
+        self.flipX = -1
+        self.flipY = None
         self.active = False
-        self.flipX = False
         self.activeRadius = 30
 
         self.__adjustImage()
@@ -25,33 +26,27 @@ class Player(AbstractPlayer):
 
     def update(self, deltaTime):
         self.position.x = self.body.position.x - 10
-        self.position.y = self.body.position.y - 10 
-
-    
-        # angle = math.atan2(self.body.linearVelocity.y, self.body.linearVelocity.x)
-        # # self.body.setTransform(self.body.getWorldCenter(), angle - math.pi / 2)
-        # print((angle - math.pi / 2) * (180 / math.pi))
-        
-        # self.image = pygame.transform.rotate(self.image, (angle) * (180 / math.pi))
-
+        self.position.y = self.body.position.y - 10
+   
+    def setPosition(self, position: tuple[Literal[0], Literal[0]]):
+        self.position = self.body.position = pygame.math.Vector2(position)
+            
     def render(self, screen: pygame.Surface):
         if self.active:
             screen.blit(self.circleImage, (self.position.x, self.position.y))
-        
         screen.blit(self.image, (self.position.x + 5, self.position.y + 5))
 
-    def flip(self, flipX: bool, flipY: bool):
-        if flipX and not self.flipX:
-            self.flipX = flipX
-            self.image = pygame.transform.flip(self.image, flipX, flipY)
-
-        if not flipX and self.flipX:
-            self.flipX = flipX
-            self.image = pygame.transform.flip(self.image, flipX, flipY)
-
-    # def __rotate(self):
-    #     self.image = pygame.transform.rotate(self.image, self.degree)
-    #     self.degree = 0
+    def flip(self, flipX: int, flipY: int):
+        if flipX is None and self.flipY != flipY:
+            if self.flipY and self.flipY * -1 == flipY:
+                self.image = pygame.transform.rotate(self.image, 180)
+            else: self.image = pygame.transform.rotate(self.image, flipY * self.flipX * -90)
+        elif flipY is None and self.flipX != flipX:
+            if self.flipX and self.flipX * -1 == flipX:
+                self.image = pygame.transform.flip(self.image, True, False)
+            else: self.image = pygame.transform.rotate(self.image, flipX * self.flipY * 90)
+        self.flipX = flipX
+        self.flipY = flipY
 
     def __adjustImage(self):
         self.image = self.image.convert()
