@@ -72,7 +72,7 @@ class Level:
                     break
                 elif player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
-                    player.canJump = True
+                    player.can_jump = True
                     player.direction.y = 0
                     break
                     

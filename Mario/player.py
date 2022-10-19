@@ -7,16 +7,18 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.import_player_asset()
         self.frame_idx = 0
+        self.status = 'idle'
         self.animation_speed = animation_speed
-        self.image = self.animations['idle'][self.frame_idx]
-        self.rect = self.image.get_rect(topleft = pos)        
-        
+        self.image = self.animations[self.status][self.frame_idx]
+        self.rect = self.image.get_rect(topleft = pos)
+        self.right_moving = True
+                       
         #player movement
         self.speed = player_speed
         self.direction = pygame.Vector2((0,0))
         self.gravity = player_gravity
         self.jump_speed = player_jump_speed
-        self.canJump = True
+        self.can_jump = True
 
     def import_player_asset(self):
         asset_path = './assets/Player/'
@@ -45,29 +47,49 @@ class Player(pygame.sprite.Sprite):
             self.animations[animation] = import_folder(full_path, x, y, width, height)
             
     def animate(self):
-        animation = self.animations['slide']
+        animation = self.animations[self.status]
         
         self.frame_idx += self.animation_speed
         if self.frame_idx >= len(animation):
             self.frame_idx = 0
             
-        self.image = animation[int(self.frame_idx)]
+        image = animation[int(self.frame_idx)]
+        
+        if self.right_moving:
+            self.image = image
+        else:
+            self.image = pygame.transform.flip(image, True, False)
         
     def get_input(self):
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_RIGHT]:
             self.direction.x = 1
+            self.right_moving = True
         elif keys[pygame.K_LEFT]:
             self.direction.x = -1
+            self.right_moving = False
         else: 
             self.direction.x = 0
             
-        if keys[pygame.K_UP] and self.canJump:
+        if keys[pygame.K_UP] and self.can_jump:
             self.jump()
+            
+    def get_status(self):
+        if self.direction.y > self.gravity:
+            self.status = 'fall'
+        elif self.direction.y < 0:
+            self.status = 'jump'
+        else:
+            if self.direction.x != 0:
+                self.status = 'run'
+            else:
+                self.status = 'idle'              
+                
             
     def update(self):
         self.get_input()
+        self.get_status()
         self.animate()
         
     def apply_gravity(self):
@@ -76,4 +98,4 @@ class Player(pygame.sprite.Sprite):
         
     def jump(self):
         self.direction.y = player_jump_speed
-        self.canJump = False
+        self.can_jump = False
