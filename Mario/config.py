@@ -16,3 +16,4 @@ screen_height = len(level_map) * tile_size
 player_speed = 8
 player_gravity = 0.8
 player_jump_speed = -16
+animation_speed = 0.15
