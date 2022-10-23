@@ -18,7 +18,10 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.Vector2((0,0))
         self.gravity = player_gravity
         self.jump_speed = player_jump_speed
-        self.can_jump = True
+        self.touch_ground = True
+        self.touch_ceiling = False
+        self.touch_left = False
+        self.touch_right = False
 
     def import_player_asset(self):
         asset_path = './assets/Player/'
@@ -60,6 +63,22 @@ class Player(pygame.sprite.Sprite):
         else:
             self.image = pygame.transform.flip(image, True, False)
         
+        # Change the rect    
+        if self.touch_ground and self.touch_right:
+            self.rect = self.image.get_rect(bottomright = self.rect.bottomright)
+        elif self.touch_ground and self.touch_left:
+            self.rect = self.image.get_rect(bottomleft = self.rect.bottomleft)
+        elif self.touch_ground:
+            self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
+        elif self.touch_ceiling and self.touch_right:
+            self.rect = self.image.get_rect(topright = self.rect.topright)
+        elif self.touch_ceiling and self.touch_left:
+            self.rect = self.image.get_rect(topleft = self.rect.topleft)
+        elif self.touch_ceiling:
+            self.rect = self.image.get_rect(midtop = self.rect.midtop)
+        else: 
+            self.rect = self.image.get_rect(center = self.rect.center)
+        
     def get_input(self):
         keys = pygame.key.get_pressed()
         
@@ -72,7 +91,7 @@ class Player(pygame.sprite.Sprite):
         else: 
             self.direction.x = 0
             
-        if keys[pygame.K_UP] and self.can_jump:
+        if keys[pygame.K_UP] and self.touch_ground:
             self.jump()
             
     def get_status(self):
@@ -98,4 +117,3 @@ class Player(pygame.sprite.Sprite):
         
     def jump(self):
         self.direction.y = player_jump_speed
-        self.can_jump = False

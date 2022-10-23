@@ -1,3 +1,4 @@
+from tkinter.font import families
 import pygame
 from tiles import Tile
 from config import *
@@ -8,6 +9,7 @@ class Level:
         self.world_shift = 0
         self.display_surface = surface
         self.setup_level(level_data)
+        self.current_player_x = 0
         
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
@@ -57,8 +59,18 @@ class Level:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
+                    player.touch_left = True
+                    self.current_player_x = player.rect.left
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
+                    player.touch_right = True
+                    self.current_player_x = player.rect.right
+        
+        if player.touch_left and (player.rect.left < self.current_player_x or player.direction.x >=0):
+            player.touch_left = False
+            
+        if player.touch_right and (player.rect.right > self.current_player_x or player.direction.x <=0):
+            player.touch_right = False
                     
     def vertical_player_movement_collision(self):
         player = self.player.sprite            
@@ -69,11 +81,17 @@ class Level:
                 if player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
+                    player.touch_ceiling = True
                     break
                 elif player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
-                    player.can_jump = True
+                    player.touch_ground = True
                     player.direction.y = 0
                     break
                     
+        if player.touch_ground and player.direction.y < 0 or player.direction.y > player.gravity:
+            player.touch_ground = False
+        
+        if player.touch_ceiling and player.direction.y > 0:
+            player.touch_ceiling = False
                 
