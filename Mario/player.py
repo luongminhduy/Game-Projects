@@ -92,6 +92,7 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
             
         if keys[pygame.K_UP] and self.touch_ground:
+            jump_fx.play()
             self.jump()
             
     def get_status(self):
