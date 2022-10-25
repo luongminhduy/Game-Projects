@@ -3,18 +3,21 @@ import pygame
 from tiles import Tile
 from config import *
 from player import Player
+from coin import *
 
 class Level:
     def __init__(self, level_data, surface) -> None:
         self.world_shift = 0
         self.display_surface = surface
+        Coin.collected_amount = 0
         self.setup_level(level_data)
         self.current_player_x = 0
         
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
-        
+        self.coins = []
+               
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
                 if cell == "X":
@@ -23,18 +26,28 @@ class Level:
                 elif cell == "P":
                     player = Player((col_index * tile_size, row_index * tile_size))
                     self.player.add(player)
+                elif cell == "$":
+                    coin = Coins((col_index * tile_size, row_index * tile_size))
+                    self.coins.append(coin)
+                    
+        Coin.current_player = self.player.sprite
     
     def run(self):
         #level tiles
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
         
+        #coins
+        for coin in self.coins:
+            coin.update(self.world_shift)
+            coin.coins.draw(self.display_surface)
+        
         #player
         self.player.update()
         self.horizontal_player_movement_collision()
         self.vertical_player_movement_collision()
         self.player.draw(self.display_surface)
-        self.scoll_x()
+        self.scoll_x()               
         
     def scoll_x(self):
         player = self.player.sprite

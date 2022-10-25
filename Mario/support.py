@@ -12,6 +12,17 @@ def import_folder(path, x, y, width, height):
             
     return surfaces
 
+def import_full_asset(path):
+    surfaces = []
+    
+    for _,_,file_names in os.walk(path):
+        for file_name in file_names:
+            full_path = path + '/' + file_name
+            asset = pygame.image.load(full_path)          
+            surfaces.append(pygame.transform.scale(asset, (asset.get_width() / 10, asset.get_height() / 10)))
+            
+    return surfaces
+
 #game sound
 pygame.mixer.pre_init()
 pygame.mixer.init()
