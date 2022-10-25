@@ -12,14 +12,14 @@ def import_folder(path, x, y, width, height):
             
     return surfaces
 
-def import_full_asset(path):
+def import_full_asset(path, scale_number = 10):
     surfaces = []
     
     for _,_,file_names in os.walk(path):
         for file_name in file_names:
             full_path = path + '/' + file_name
             asset = pygame.image.load(full_path)          
-            surfaces.append(pygame.transform.scale(asset, (asset.get_width() / 10, asset.get_height() / 10)))
+            surfaces.append(pygame.transform.scale(asset, (asset.get_width() / scale_number, asset.get_height() / scale_number)))
             
     return surfaces
 
@@ -44,3 +44,6 @@ hurt_fx.set_volume(0.5)
 
 coin_fx = pygame.mixer.Sound('sounds/coin.wav')
 coin_fx.set_volume(0.5)
+
+unlocking_fx = pygame.mixer.Sound('sounds/unlocking.wav')
+unlocking_fx.set_volume(1)
