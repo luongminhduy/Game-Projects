@@ -52,7 +52,7 @@ class Level:
         self.keys.update(self.world_shift, self.player.sprite)
         self.keys.draw(self.display_surface)
         
-        #level chests
+        #chests
         self.chests.update(self.world_shift, self.display_surface, self.player.sprite)
         self.chests.draw(self.display_surface)
         
@@ -66,6 +66,7 @@ class Level:
         self.horizontal_player_movement_collision()
         self.vertical_player_movement_collision()
         self.player.draw(self.display_surface)
+        self.check_and_unlock_chest()
         self.scoll_x()               
         
     def scoll_x(self):
@@ -127,3 +128,15 @@ class Level:
         if player.touch_ceiling and player.direction.y > 0:
             player.touch_ceiling = False
                 
+    def check_and_unlock_chest(self):
+        player = self.player.sprite
+
+        if player.using_key and Key.collected_amount > 0:           
+            for chest in self.chests.sprites():
+                if (player.rect.bottom == chest.rect.top) or (player.rect.left == chest.rect.right) or (player.rect.right == chest.rect.left):
+                    chest.unlock()                   
+                    Key.collected_amount -= 1
+                    
+                    break
+            
+        player.using_key = False

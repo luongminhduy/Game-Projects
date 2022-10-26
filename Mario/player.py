@@ -1,3 +1,4 @@
+from numpy import true_divide
 import pygame
 from config import *
 from support import *
@@ -22,6 +23,9 @@ class Player(pygame.sprite.Sprite):
         self.touch_ceiling = False
         self.touch_left = False
         self.touch_right = False
+        
+        #player unlock chest
+        self.using_key = False
 
     def import_player_asset(self):
         asset_path = './assets/Player/'
@@ -81,6 +85,9 @@ class Player(pygame.sprite.Sprite):
         
     def get_input(self):
         keys = pygame.key.get_pressed()
+        
+        if keys[pygame.K_k]:
+            self.using_key = True
         
         if keys[pygame.K_RIGHT]:
             self.direction.x = 1

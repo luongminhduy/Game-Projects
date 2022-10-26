@@ -22,22 +22,21 @@ class Chest(pygame.sprite.Sprite):
     def animate(self):
         if self.is_blocked or self.frame_idx == len(self.animation) - 1: return
                 
-        if self.frame_idx == 0:
-            self.frame_idx = 1       
-        else:      
-            self.frame_idx += animation_speed
+   
+        self.frame_idx += animation_speed
+        
+        if self.frame_idx >= len(self.animation):
+            self.item = pygame.sprite.GroupSingle()
+            self.item.add(Cuirass(self.rect.center))
             
-            if self.frame_idx >= len(self.animation):
-                self.item = pygame.sprite.GroupSingle()
-                self.item.add(Cuirass(self.rect.center))
-                
-                self.frame_idx = len(self.animation) - 1
+            self.frame_idx = len(self.animation) - 1
         
         self.image = self.animation[int(self.frame_idx)]        
         self.rect = self.image.get_rect(center = self.rect.center)
     
     def unlock(self):
-        self.is_block = False
+        self.is_blocked = False
+        self.frame_idx = 1
         unlocking_fx.play()
         
         
