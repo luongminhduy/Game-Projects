@@ -136,7 +136,6 @@ class Level:
                 if (player.rect.bottom == chest.rect.top) or (player.rect.left == chest.rect.right) or (player.rect.right == chest.rect.left):
                     chest.unlock()                   
                     Key.collected_amount -= 1
-                    
                     break
             
         player.using_key = False

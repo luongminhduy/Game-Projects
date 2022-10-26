@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animations[self.status][self.frame_idx]
         self.rect = self.image.get_rect(topleft = pos)
         self.right_moving = True
+        self.wearing_cuirass = False
                        
         #player movement
         self.speed = player_speed
@@ -38,23 +39,36 @@ class Player(pygame.sprite.Sprite):
                 x, y, width, height  = 110, 20, 340, 520
             elif animation == 'run':
                 x, y, width, height  = 110, 20, 440, 520
-            elif animation == 'jump':
+            elif animation in ['jump', 'fall']:
                 x, y, width, height  = 110, 20, 400, 520
-            elif animation == 'fall':
-                x, y, width, height  = 110, 20, 400, 520
-            elif animation == 'shoot':
+            elif animation in ['shoot', 'melee', 'dead']:
                 x, y, width, height  = 110, 20, 470, 520
-            elif animation == 'melee':
-                x, y, width, height  = 110, 20, 470, 520
-            elif animation == 'slide':
-                x, y, width, height  = 50, 20, 470, 520
             else:
-                x, y, width, height  = 110, 20, 470, 520
+                x, y, width, height  = 50, 20, 470, 520
                 
             self.animations[animation] = import_folder(full_path, x, y, width, height)
+        
+        super_asset_path = './assets/SuperPlayer/'
+        self.super_animations = {'idle':[], 'run':[], 'jump':[], 'fall':[], 'attack':[], 'dead':[]}
+        
+        for animation in self.super_animations.keys():
+            full_path = super_asset_path + animation
+            
+            if animation in ['idle', 'run', 'jump', 'fall']:
+                x, y, width, height  = 15, 20, 490, 650
+            elif animation == 'attack':
+                x, y, width, height  = 15, 20, 540, 650
+            else:
+                x, y, width, height  = 10, 20, 900, 650
+                
+            self.super_animations[animation] = import_folder(full_path, x, y, width, height, 11)
             
     def animate(self):
-        animation = self.animations[self.status]
+        
+        if self.wearing_cuirass:
+            animation = self.super_animations[self.status]
+        else:
+            animation = self.animations[self.status]
         
         self.frame_idx += self.animation_speed
         if self.frame_idx >= len(animation):
@@ -111,8 +125,7 @@ class Player(pygame.sprite.Sprite):
             if self.direction.x != 0:
                 self.status = 'run'
             else:
-                self.status = 'idle'              
-                
+                self.status = 'idle'                             
             
     def update(self):
         self.get_input()

@@ -2,13 +2,13 @@ import os
 import pygame
 from config import *
 
-def import_folder(path, x, y, width, height):
+def import_folder(path, x, y, width, height, scale_number = 10):
     surfaces = []
     
     for _,_,file_names in os.walk(path):
         for file_name in file_names:
             full_path = path + '/' + file_name            
-            surfaces.append(pygame.transform.scale(pygame.image.load(full_path).convert_alpha().subsurface((x, y, width, height)), (width/10, height/10)))
+            surfaces.append(pygame.transform.scale(pygame.image.load(full_path).convert_alpha().subsurface((x, y, width, height)), (width/scale_number, height/scale_number)))
             
     return surfaces
 
@@ -47,3 +47,6 @@ coin_fx.set_volume(0.5)
 
 unlocking_fx = pygame.mixer.Sound('sounds/unlocking.wav')
 unlocking_fx.set_volume(1)
+
+transform_fx = pygame.mixer.Sound('sounds/transform.flac')
+transform_fx.set_volume(0.5)

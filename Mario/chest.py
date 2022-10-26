@@ -20,8 +20,7 @@ class Chest(pygame.sprite.Sprite):
         self.animation = import_full_asset(asset_path, 6)
         
     def animate(self):
-        if self.is_blocked or self.frame_idx == len(self.animation) - 1: return
-                
+        if self.is_blocked or self.frame_idx == len(self.animation) - 1: return                
    
         self.frame_idx += animation_speed
         
@@ -38,8 +37,7 @@ class Chest(pygame.sprite.Sprite):
         self.is_blocked = False
         self.frame_idx = 1
         unlocking_fx.play()
-        
-        
+              
     def update(self, x_shift, display_surface, sprite):          
         self.animate()
         
