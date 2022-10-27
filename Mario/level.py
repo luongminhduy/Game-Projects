@@ -1,11 +1,14 @@
 from tkinter.font import families
+from tkinter.tix import DirTree
 import pygame
+from boss import Boss
 from tiles import Tile
 from config import *
 from player import Player
 from coin import *
 from key import *
 from chest import *
+from enemy import Enemy
 
 class Level:
     def __init__(self, level_data, surface) -> None:
@@ -20,17 +23,26 @@ class Level:
         self.tiles = pygame.sprite.Group()
         self.chests = pygame.sprite.Group()
         self.keys = pygame.sprite.Group()
+        self.enemies = pygame.sprite.GroupSingle()
         self.player = pygame.sprite.GroupSingle()
         self.coins = []
                
+        self.bosses =  pygame.sprite.GroupSingle()
+        
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
                 if cell == "X":
-                    tile = Tile((col_index * tile_size, row_index * tile_size), tile_size)
+                    tile = Tile((col_index * tile_size, row_index * tile_size), tile_size, "Dirt")
                     self.tiles.add(tile)
-                elif cell == "P":
+                if cell == "E":
+                    enemy = Enemy((col_index * tile_size, row_index * tile_size ))
+                    self.enemies.add(enemy)
+                if cell == "P":
                     player = Player((col_index * tile_size, row_index * tile_size))
                     self.player.add(player)
+                if cell == "T":
+                    boss = Boss((col_index * tile_size, row_index * tile_size )) 
+                    self.bosses.add(boss)       
                 elif cell == "$":
                     coin = Coins((col_index * tile_size, row_index * tile_size))
                     self.coins.append(coin)
@@ -60,14 +72,26 @@ class Level:
         for coin in self.coins:
             coin.update(self.world_shift)
             coin.coins.draw(self.display_surface)
+
+        #enemy
+        self.enemies.update(self.world_shift)
+        self.enemies.draw(self.display_surface)
+
+        #boss
+        self.bosses.update(self.world_shift)
+        self.bosses.draw(self.display_surface)
         
         #player
         self.player.update()
         self.horizontal_player_movement_collision()
         self.vertical_player_movement_collision()
+        self.player_enemy_collision()
+        self.player_boss_collision()
         self.player.draw(self.display_surface)
         self.check_and_unlock_chest()
         self.scoll_x()               
+
+        #self.enemy.update()
         
     def scoll_x(self):
         player = self.player.sprite
@@ -139,3 +163,30 @@ class Level:
                     break
             
         player.using_key = False
+
+    def player_enemy_collision(self):
+        player = self.player.sprite
+        for enemy in self.enemies:
+            if enemy.rect.colliderect(player.rect):
+                if player.direction.y > 1:
+                    print(player.direction.y)
+                    player.touch_ground = True
+                    player.jump()
+                    enemy.die()
+                else:
+                    pygame.quit()
+
+    def player_boss_collision(self):
+        player = self.player.sprite
+        for boss in self.bosses:
+            if boss.rect.colliderect(player.rect):
+                if (boss.attack):
+                    print("Game Over")
+                    pygame.quit()
+                elif player.direction.y > 0:
+                    player.touch_ground = True
+                    player.jump()
+                    boss.hp -= 1
+                    print(boss.hp)
+                    if (boss.hp < 0):
+                        boss.die()

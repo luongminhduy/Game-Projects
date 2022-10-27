@@ -137,4 +137,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.direction.y
         
     def jump(self):
-        self.direction.y = player_jump_speed
+        if (self.touch_ground):
+            self.direction.y = player_jump_speed
+            self.touch_ground = False

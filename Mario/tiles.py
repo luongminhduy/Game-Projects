@@ -1,12 +1,16 @@
+import string
 import pygame
 
 class Tile(pygame.sprite.Sprite):
     
-    def __init__(self, pos, size) -> None:
+    def __init__(self, pos, size, type:string) -> None:
         super().__init__()
         
         self.image = pygame.Surface((size, size))
-        self.image.fill('grey')
+        #self.image.fill('grey')
+        #self.rect = self.image.get_rect(topleft = pos)
+        if (type == 'Dirt'):
+            self.image = pygame.image.load("./assets/Tiles/Dirt.png")
         self.rect = self.image.get_rect(topleft = pos)
         
     def update(self, x_shift):
