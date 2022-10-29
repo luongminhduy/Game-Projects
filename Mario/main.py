@@ -2,6 +2,9 @@ import pygame
 import sys
 from config import *
 from level import Level
+from key import *
+from coin import *
+from cuirass import *
 
 pygame.init()
 
@@ -23,7 +26,8 @@ color = (255,255,255)
 color_light = (170,170,170) 
   
 # dark shade of the button 
-color_dark = (100,100,100) 
+color_dark = (100,100,100)
+color_dark_1 = (255, 255, 0) 
   
 # stores the width of the 
 # screen into a variable 
@@ -155,7 +159,18 @@ while True:
     screen.fill('black')
     screen.blit(bg, bg.get_rect())
     level.run()
-    
+    textKeys = smallfont.render("Keys: ", True, color_dark_1)
+    textCoins = smallfont.render("Coins: ", True, color_dark_1)
+    textCuirass = smallfont.render("Cuirass: ", True, color_dark_1)
+    keys = smallfont.render(str(Key.collected_amount), True, color_dark_1)
+    coins = smallfont.render(str(Coin.collected_amount), True, color_dark_1)
+    cuirass = smallfont.render(str(Cuirass.collected_amount), True, color_dark_1)
+    screen.blit(textKeys, (20, 10))
+    screen.blit(keys, (100, 10))
+    screen.blit(textCoins, (180, 10))
+    screen.blit(coins, (280, 10))
+    screen.blit(textCuirass, (360, 10))
+    screen.blit(cuirass, (490, 10))
     pygame.display.update()
     clock.tick(60)
 #---

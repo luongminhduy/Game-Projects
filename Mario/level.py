@@ -27,6 +27,7 @@ class Level:
         self.keys = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
+        
         self.coins = []
                
         self.bosses =  pygame.sprite.GroupSingle()
