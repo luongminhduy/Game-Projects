@@ -131,6 +131,7 @@ class Player(pygame.sprite.Sprite):
         self.get_input()
         self.get_status()
         self.animate()
+        print(self.rect.y)
         
     def apply_gravity(self):
         self.direction.y += self.gravity

@@ -18,12 +18,14 @@ class Level:
         Key.collected_amount = 0
         self.setup_level(level_data)
         self.current_player_x = 0
+        self.running = "playing"
+        self.reset = False
         
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
         self.chests = pygame.sprite.Group()
         self.keys = pygame.sprite.Group()
-        self.enemies = pygame.sprite.GroupSingle()
+        self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.coins = []
                
@@ -87,6 +89,7 @@ class Level:
         self.vertical_player_movement_collision()
         self.player_enemy_collision()
         self.player_boss_collision()
+        self.check_player_falling()
         self.player.draw(self.display_surface)
         self.check_and_unlock_chest()
         self.scoll_x()               
@@ -174,15 +177,17 @@ class Level:
                     player.jump()
                     enemy.die()
                 else:
-                    pygame.quit()
+                    self.reset = True
+                    self.running = "gameover"
 
     def player_boss_collision(self):
         player = self.player.sprite
         for boss in self.bosses:
-            if boss.rect.colliderect(player.rect):
+            if boss.collideRect.colliderect(player.rect):
                 if (boss.attack):
                     print("Game Over")
-                    pygame.quit()
+                    self.reset = True
+                    self.running = "gameover"
                 elif player.direction.y > 0:
                     player.touch_ground = True
                     player.jump()
@@ -190,3 +195,10 @@ class Level:
                     print(boss.hp)
                     if (boss.hp < 0):
                         boss.die()
+    
+    def check_player_falling(self):
+        player = self.player.sprite
+        if (player.rect.y > screen_height + 100):
+            print("Game Over")
+            self.reset = True
+            self.running = "gameover"
