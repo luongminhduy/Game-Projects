@@ -1,9 +1,9 @@
 level_map = [
 '                                                                                          ',
-'                       $                                                                  ',
-'          E                                                                               ',
-' XX     XXX      T   XXX                                                                  ',
-' XX P                    K                                        XXXXX                   ',
+'  $      $             $                                                                  ',
+'  C K     E    T                                                                          ',
+' XX     XXX          XXX                                                                  ',
+' XXP                    K                                        XXXXX                   ',
 ' XXXX         XX        XX                       X                                        ',
 ' XXX    X   XXXX   XX                         X                                           ',
 '       XX   XXXX   XX  XX              C   X                 XXXXX                        ',

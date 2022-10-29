@@ -24,9 +24,14 @@ class Player(pygame.sprite.Sprite):
         self.touch_ceiling = False
         self.touch_left = False
         self.touch_right = False
+        self.collided_sprite = None
         
         #player unlock chest
         self.using_key = False
+        self.touch_left_chest = False
+        self.touch_right_chest = False
+        self.on_chest = False
+        self.collided_chest = None
 
     def import_player_asset(self):
         asset_path = './assets/Player/'
@@ -82,6 +87,7 @@ class Player(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(image, True, False)
         
         # Change the rect    
+        self.rect = self.image.get_rect(center = self.rect.center)
         if self.touch_ground and self.touch_right:
             self.rect = self.image.get_rect(bottomright = self.rect.bottomright)
         elif self.touch_ground and self.touch_left:
@@ -94,8 +100,8 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(topleft = self.rect.topleft)
         elif self.touch_ceiling:
             self.rect = self.image.get_rect(midtop = self.rect.midtop)
-        else: 
-            self.rect = self.image.get_rect(center = self.rect.center)
+        # else: 
+        #     self.rect = self.image.get_rect(center = self.rect.center)
         
     def get_input(self):
         keys = pygame.key.get_pressed()

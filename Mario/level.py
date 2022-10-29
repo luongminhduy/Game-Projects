@@ -34,11 +34,13 @@ class Level:
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
                 if cell == "X":
-                    tile = Tile((col_index * tile_size, row_index * tile_size), tile_size, "Dirt")
+                    if(layout[row_index - 1][col_index] != 'X'):
+                        tile = Tile((col_index * tile_size, row_index * tile_size), tile_size, "Grass")
+                    else: tile = Tile((col_index * tile_size, row_index * tile_size), tile_size, "Dirt")
                     self.tiles.add(tile)
                 if cell == "E":
                     enemy = Enemy((col_index * tile_size, row_index * tile_size ))
-                    self.enemies.add(enemy)
+                    self.enemies.add(enemy)                    
                 if cell == "P":
                     player = Player((col_index * tile_size, row_index * tile_size))
                     self.player.add(player)
@@ -114,27 +116,43 @@ class Level:
     def horizontal_player_movement_collision(self):
         player = self.player.sprite            
         player.rect.x += player.direction.x * player.speed 
-        
+
         for sprite in self.tiles.sprites() + self.chests.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                     player.touch_left = True
                     self.current_player_x = player.rect.left
+                    player.collided_sprite = sprite
+                    if sprite in self.chests.sprites() and sprite.is_blocked:
+                        print('collide_chest')
+                        player.touch_left_chest = True
+                        player.collided_chest = sprite
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
                     player.touch_right = True
                     self.current_player_x = player.rect.right
+                    player.collided_sprite = sprite
+                    if sprite in self.chests.sprites() and sprite.is_blocked:
+                        print('collide_chest')
+                        player.touch_right_chest = True
+                        player.collided_chest = sprite
         
         if player.touch_left and (player.rect.left < self.current_player_x or player.direction.x >=0):
             player.touch_left = False
+            player.collided_sprite = None
+            player.collided_chest = None
+            player.touch_left_chest = False
             
         if player.touch_right and (player.rect.right > self.current_player_x or player.direction.x <=0):
             player.touch_right = False
+            player.collided_sprite = None
+            player.collided_chest = None
+            player.touch_right_chest = False
                     
     def vertical_player_movement_collision(self):
         player = self.player.sprite            
-        player.apply_gravity()
+        player.apply_gravity() 
         
         for sprite in self.tiles.sprites() + self.chests.sprites():
             if sprite.rect.colliderect(player.rect):
@@ -142,28 +160,51 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
                     player.touch_ceiling = True
+                    player.collided_sprite = sprite
                     break
                 elif player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
                     player.touch_ground = True
                     player.direction.y = 0
+                    player.collided_sprite = sprite
+                    if sprite in self.chests.sprites() and sprite.is_blocked:
+                        player.on_chest = True
+                        print('collide_chest')
+                        player.collided_chest = sprite
                     break
                     
         if player.touch_ground and player.direction.y < 0 or player.direction.y > player.gravity:
             player.touch_ground = False
+            player.collided_sprite = None
+            player.collided_chest = None
+            player.on_chest = False
         
         if player.touch_ceiling and player.direction.y > 0:
             player.touch_ceiling = False
+            player.collided_sprite = None
                 
     def check_and_unlock_chest(self):
         player = self.player.sprite
 
-        if player.using_key and Key.collected_amount > 0:           
-            for chest in self.chests.sprites():
-                if (player.rect.bottom == chest.rect.top) or (player.rect.left == chest.rect.right) or (player.rect.right == chest.rect.left):
-                    chest.unlock()                   
-                    Key.collected_amount -= 1
-                    break
+        # if player.using_key and Key.collected_amount > 0:           
+        #     for chest in self.chests.sprites():
+        #         print("chest right:",chest.rect.right )
+        #         print("player left:", player.rect.left)
+        #         print("chest left:",chest.rect.left )
+        #         print("player right:", player.rect.right)
+        #         if (player.rect.bottom == chest.rect.top) or (player.rect.left == chest.rect.right) or (player.rect.right == chest.rect.left):
+        #             chest.unlock()                   
+        #             Key.collected_amount -= 1
+        #             print('open')
+        #             break
+        if player.using_key and Key.collected_amount > 0: 
+            if player.collided_chest != None:
+                player.collided_chest.unlock()
+                Key.collected_amount -= 1
+                print('open') 
+                player.collided_chest = None
+                    
+                
             
         player.using_key = False
 
