@@ -1,3 +1,4 @@
+import math
 from tkinter.font import families
 from tkinter.tix import DirTree
 import pygame
@@ -124,32 +125,16 @@ class Level:
                     player.rect.left = sprite.rect.right
                     player.touch_left = True
                     self.current_player_x = player.rect.left
-                    player.collided_sprite = sprite
-                    if sprite in self.chests.sprites() and sprite.is_blocked:
-                        print('collide_chest')
-                        player.touch_left_chest = True
-                        player.collided_chest = sprite
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
                     player.touch_right = True
                     self.current_player_x = player.rect.right
-                    player.collided_sprite = sprite
-                    if sprite in self.chests.sprites() and sprite.is_blocked:
-                        print('collide_chest')
-                        player.touch_right_chest = True
-                        player.collided_chest = sprite
         
         if player.touch_left and (player.rect.left < self.current_player_x or player.direction.x >=0):
             player.touch_left = False
-            player.collided_sprite = None
-            player.collided_chest = None
-            player.touch_left_chest = False
             
         if player.touch_right and (player.rect.right > self.current_player_x or player.direction.x <=0):
             player.touch_right = False
-            player.collided_sprite = None
-            player.collided_chest = None
-            player.touch_right_chest = False
                     
     def vertical_player_movement_collision(self):
         player = self.player.sprite            
@@ -161,66 +146,49 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
                     player.touch_ceiling = True
-                    player.collided_sprite = sprite
                     break
                 elif player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
                     player.touch_ground = True
                     player.direction.y = 0
-                    player.collided_sprite = sprite
-                    if sprite in self.chests.sprites() and sprite.is_blocked:
-                        player.on_chest = True
-                        print('collide_chest')
-                        player.collided_chest = sprite
                     break
                     
         if player.touch_ground and player.direction.y < 0 or player.direction.y > player.gravity:
             player.touch_ground = False
-            player.collided_sprite = None
-            player.collided_chest = None
-            player.on_chest = False
         
         if player.touch_ceiling and player.direction.y > 0:
             player.touch_ceiling = False
-            player.collided_sprite = None
                 
     def check_and_unlock_chest(self):
         player = self.player.sprite
 
-        # if player.using_key and Key.collected_amount > 0:           
-        #     for chest in self.chests.sprites():
-        #         print("chest right:",chest.rect.right )
-        #         print("player left:", player.rect.left)
-        #         print("chest left:",chest.rect.left )
-        #         print("player right:", player.rect.right)
-        #         if (player.rect.bottom == chest.rect.top) or (player.rect.left == chest.rect.right) or (player.rect.right == chest.rect.left):
-        #             chest.unlock()                   
-        #             Key.collected_amount -= 1
-        #             print('open')
-        #             break
-        if player.using_key and Key.collected_amount > 0: 
-            if player.collided_chest != None:
-                player.collided_chest.unlock()
-                Key.collected_amount -= 1
-                print('open') 
-                player.collided_chest = None
-                    
+        if player.using_key and Key.collected_amount > 0:           
+            for chest in self.chests.sprites():
+                if (player.rect.bottom == chest.rect.top) or abs(player.rect.left - chest.rect.right) <= 15 or abs(player.rect.right - chest.rect.left) <= 10:
+                    chest.unlock()                   
+                    Key.collected_amount -= 1
+                    print('open')
+                    break
                 
-            
         player.using_key = False
 
     def player_enemy_collision(self):
         player = self.player.sprite
         for enemy in self.enemies:
             if enemy.rect.colliderect(player.rect):
-                if player.direction.y > 1:
-                    print(player.direction.y)
+                if player.rect.bottom > enemy.rect.top and player.touch_ground == False:
                     player.touch_ground = True
                     player.jump()
                     enemy.die()
                 else:
-                    self.reset = True
-                    self.running = "gameover"
+                    hurt_fx.play()
+                    if player.wearing_cuirass:
+                        if Cuirass.collected_amount > 0:
+                            Cuirass.collected_amount -= 1
+                        else: player.wearing_cuirass = False
+                    else:                          
+                        self.reset = True
+                        self.running = "gameover"
 
     def player_boss_collision(self):
         player = self.player.sprite

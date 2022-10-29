@@ -1,4 +1,3 @@
-from numpy import true_divide
 import pygame
 from config import *
 from support import *
@@ -24,14 +23,9 @@ class Player(pygame.sprite.Sprite):
         self.touch_ceiling = False
         self.touch_left = False
         self.touch_right = False
-        self.collided_sprite = None
         
         #player unlock chest
         self.using_key = False
-        self.touch_left_chest = False
-        self.touch_right_chest = False
-        self.on_chest = False
-        self.collided_chest = None
 
     def import_player_asset(self):
         asset_path = './assets/Player/'
@@ -137,7 +131,6 @@ class Player(pygame.sprite.Sprite):
         self.get_input()
         self.get_status()
         self.animate()
-        print(self.rect.y)
         
     def apply_gravity(self):
         self.direction.y += self.gravity
