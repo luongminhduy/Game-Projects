@@ -11,7 +11,9 @@ class Boss(pygame.sprite.Sprite):
         self.sprite = pygame.image.load('./assets/Enemy/tucano.png')
         self.image = self.sprite.subsurface(0, 0, 224 , 224)
         self.rect = self.image.get_rect(topleft = pos)
-        self.collideRect = pygame.rect.Rect(pos, (112, 112))
+        x, y = pos
+        self.collideRect = pygame.rect.Rect((x, y + 56), (112, 112))
+        self.flipX = x + 50
         self.flipImage = pygame.transform.flip(self.image, True, False)
         self.status = 'idle'
         self.frame = 0
@@ -29,7 +31,7 @@ class Boss(pygame.sprite.Sprite):
         for i in range(0, 5):
             img = self.sprite.subsurface(0 + i * 224, 0 , 224, 224)
             self.animations['idle'].append(img)
-            self.flipAnimations['idle'].append( pygame.transform.flip(img, True, False))
+            self.flipAnimations['idle'].append(pygame.transform.flip(img, True, False))
     
     def animate(self):
         if self.countFrame % 10 == 0:
@@ -37,6 +39,7 @@ class Boss(pygame.sprite.Sprite):
                 self.frame = (self.frame + 1) % 4
             if (self.right_moving):
                 self.image = self.flipAnimations['idle'][self.frame]
+                self.collideRect.x = self.rect.x + 60 
             else:
                 self.image = self.animations['idle'][self.frame]
             

@@ -171,6 +171,8 @@ while True:
     screen.blit(coins, (280, 10))
     screen.blit(textCuirass, (360, 10))
     screen.blit(cuirass, (490, 10))
+    #for boss in level.bosses:
+        #pygame.draw.rect(screen, (22, 22, 106), boss.collideRect)
     pygame.display.update()
     clock.tick(60)
 #---

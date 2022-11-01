@@ -195,10 +195,16 @@ class Level:
         for boss in self.bosses:
             if boss.collideRect.colliderect(player.rect):
                 if (boss.attack):
-                    print("Game Over")
-                    self.reset = True
-                    self.running = "gameover"
+                    if (player.rect.x <= boss.rect.x + 56 and not(boss.right_moving) or
+                         player.rect.x >= boss.rect.x and boss.right_moving):
+                        print("Game Over")
+                        self.reset = True
+                        self.running = "gameover"
                 elif player.direction.y > 0:
+                    print("x of player is:")
+                    print(player.rect.x)
+                    print("x of boss is:")
+                    print(boss.rect.x)
                     player.touch_ground = True
                     player.jump()
                     boss.hp -= 1
