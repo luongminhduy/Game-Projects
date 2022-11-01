@@ -10,7 +10,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__()
         self.sprite = pygame.image.load('./assets/Enemy/porkim.png')
         self.image = self.sprite.subsurface(56, 146, 112, 80)
-        self.rect = self.image.get_rect(topleft =pos)
+        self.rect = self.image.get_rect(bottomleft =(pos[0],pos[1]+40))
         self.flipImage = pygame.transform.flip(self.image, True, False)
         self.status = 'idle'
         self.frame = 0
@@ -23,9 +23,9 @@ class Enemy(pygame.sprite.Sprite):
 
     def import_enemy_assets(self):
         for i in range(0, 5):
-            img = self.sprite.subsurface(56 + 0, 146 + i * 224, 112, 80)
+            img = pygame.transform.scale(self.sprite.subsurface(56 + 0, 146 + i * 224, 112, 80),(64,50))
             self.animations['idle'].append(img)
-            self.flipAnimations['idle'].append( pygame.transform.flip(img, True, False))
+            self.flipAnimations['idle'].append(pygame.transform.flip(img, True, False))
     
     def animate(self):
         if self.countFrame % 10 == 0:

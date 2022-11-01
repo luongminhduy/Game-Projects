@@ -28,25 +28,31 @@ pygame.mixer.pre_init()
 pygame.mixer.init()
 
 jump_fx = pygame.mixer.Sound('sounds/jump.wav')
-jump_fx.set_volume(0.5)
+jump_fx.set_volume(1)
 
 game_over_fx = pygame.mixer.Sound('sounds/GameOver.wav')
-game_over_fx.set_volume(0.5)
+game_over_fx.set_volume(1)
 
 melee_fx = pygame.mixer.Sound('sounds/UsingKnife.wav')
-melee_fx.set_volume(0.5)
+melee_fx.set_volume(1)
 
 shoot_fx = pygame.mixer.Sound('sounds/Shoot.wav')
-shoot_fx.set_volume(0.5)
+shoot_fx.set_volume(1)
 
 hurt_fx = pygame.mixer.Sound('sounds/Hurt.wav')
-hurt_fx.set_volume(0.5)
+hurt_fx.set_volume(1)
 
 coin_fx = pygame.mixer.Sound('sounds/coin.wav')
-coin_fx.set_volume(0.5)
+coin_fx.set_volume(1)
 
 unlocking_fx = pygame.mixer.Sound('sounds/unlocking.wav')
 unlocking_fx.set_volume(1)
 
 transform_fx = pygame.mixer.Sound('sounds/transform.flac')
-transform_fx.set_volume(0.5)
+transform_fx.set_volume(1)
+
+enemyAttack_fx = pygame.mixer.Sound('sounds/EnemyAttack.wav')
+enemyAttack_fx.set_volume(1)
+
+win_fx = pygame.mixer.Sound('sounds/win.wav')
+win_fx.set_volume(1)

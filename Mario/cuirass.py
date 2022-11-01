@@ -15,10 +15,10 @@ class Cuirass(pygame.sprite.Sprite):
         
     def check_collected(self, sprite):
         if self.rect.colliderect(sprite.rect):
+            transform_fx.play()
             if sprite.wearing_cuirass:
                 Cuirass.collected_amount += 1
-            else:
-                transform_fx.play()
+            else:              
                 sprite.wearing_cuirass = True
                 
             self.kill()

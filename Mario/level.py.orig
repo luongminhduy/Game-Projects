@@ -17,7 +17,6 @@ class Level:
         self.display_surface = surface
         Coin.collected_amount = 0
         Key.collected_amount = 0
-        Cuirass.collected_amount = 0
         self.setup_level(level_data)
         self.current_player_x = 0
         self.running = "playing"
@@ -37,6 +36,7 @@ class Level:
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
                 if cell == "X":
+                    print('row:',row_index,'colunm:',col_index)
                     if row_index == 0: tile = Tile((col_index * tile_size, row_index * tile_size), tile_size, "Dirt")
                     elif(layout[row_index - 1][col_index] != 'X'):
                         tile = Tile((col_index * tile_size, row_index * tile_size), tile_size, "Grass")
@@ -206,20 +206,30 @@ class Level:
         for boss in self.bosses:
             if boss.collideRect.colliderect(player.rect):
                 if (boss.attack):
+<<<<<<< Updated upstream
+                    if (player.rect.x <= boss.rect.x + 56 and not(boss.right_moving) or
+                         player.rect.x >= boss.rect.x and boss.right_moving):
+                        print("Game Over")
+                        self.reset = True
+                        self.running = "gameover"
+=======
+                    hurt_fx.play()
                     melee_fx.play()
-                    if (player.rect.x <= boss.rect.x + 56 and not(boss.right_moving) or player.rect.x >= boss.rect.x and boss.right_moving):
-                        hurt_fx.play()                      
-                        if player.wearing_cuirass:
-                            if Cuirass.collected_amount > 0:
-                                Cuirass.collected_amount -= 1
-                            else: 
-                                player.wearing_cuirass = False
-                            player.jump()                  
-                        else:
-                            self.reset = True
-                            self.running = "gameover"
-                            game_over_fx.play()
+                    print("Game Over")
+                    if player.wearing_cuirass:
+                        if Cuirass.collected_amount > 0:
+                            Cuirass.collected_amount -= 1
+                        else: player.wearing_cuirass = False
+                    else:                          
+                        self.reset = True
+                        self.running = "gameover"
+                        game_over_fx.play()
+>>>>>>> Stashed changes
                 elif player.direction.y > 0:
+                    print("x of player is:")
+                    print(player.rect.x)
+                    print("x of boss is:")
+                    print(boss.rect.x)
                     player.touch_ground = True
                     player.jump()
                     boss.hp -= 1

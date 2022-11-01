@@ -1,3 +1,16 @@
+<<<<<<< Updated upstream
+level_map = [
+'                                                                                          ',
+'  $      $             $                                                                  ',
+'  C K     E    T                                                                          ',
+' XX K   XXX        XXXXX                                                                  ',
+' XXP                     K                                        XXXXX                   ',
+' XXXX         XX        XX                       X                                        ',
+' XXX    X   XXXX   XX                         X                                           ',
+'       XX   XXXX   XX  XX              C   X                 XXXXX                        ',
+'    XXXXX   XXXXX  XX  XXX            XXX                XXXXXXXXX                        ',
+'XXXXXXXXX   XXXXX  XX  XXX      XXX                     XXXXXXXXXX         XXXXXX         ']
+=======
 # level_map = [
 # '                                                                                          ',
 # '  $      $             $                                                                  ',
@@ -22,6 +35,7 @@ level_map =[
 'XXXXXXX XXXX  XXXXXXXX  X ' * 4 + ' ' + 'X'*4
 ]
 
+>>>>>>> Stashed changes
 
 tile_size = 64
 screen_width = 1180

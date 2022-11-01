@@ -27,7 +27,7 @@ color_light = (170,170,170)
   
 # dark shade of the button 
 color_dark = (100,100,100)
-color_dark_1 = (255, 255, 0) 
+color_dark_1 = (255, 0, 0) 
   
 # stores the width of the 
 # screen into a variable 
@@ -186,7 +186,7 @@ while True:
     level.run()
     textKeys = smallfont.render("Keys: ", True, color_dark_1)
     textCoins = smallfont.render("Coins: ", True, color_dark_1)
-    textCuirass = smallfont.render("Cuirass: ", True, color_dark_1)
+    textCuirass = smallfont.render("Cuirasses: ", True, color_dark_1)
     keys = smallfont.render(str(Key.collected_amount), True, color_dark_1)
     coins = smallfont.render(str(Coin.collected_amount), True, color_dark_1)
     cuirass = smallfont.render(str(Cuirass.collected_amount), True, color_dark_1)
@@ -202,17 +202,17 @@ while True:
     clock.tick(60)
 #---
 
-while True:
-    #for boss in level.bosses:
-        #pygame.draw.rect(screen, color, boss.collideRect, 1)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+# while True:
+#     #for boss in level.bosses:
+#         #pygame.draw.rect(screen, color, boss.collideRect, 1)
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             pygame.quit()
+#             sys.exit()
     
-    screen.fill('black')
-    screen.blit(bg, bg.get_rect())
-    level.run()
+#     screen.fill('black')
+#     screen.blit(bg, bg.get_rect())
+#     level.run()
     
-    pygame.display.update()
-    clock.tick(60)
+#     pygame.display.update()
+#     clock.tick(60)
