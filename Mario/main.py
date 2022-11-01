@@ -47,6 +47,7 @@ quitText = smallfont.render('quit', True, color)
 aboutText = smallfont.render('about', True, color)
 howToPlay = smallfont.render('nhay len dau de tieu diet ke dich, tim chia khoa de mo ruong lay ao giap tang mang', True, color_dark)
 gameOver = smallfont.render('Game Over', True, color_dark)
+victory = smallfont.render('VICTORY', True, color_dark)
 newGame = smallfont.render('New Game', True, color)
 level.running = "menu" 
   
@@ -146,6 +147,30 @@ while True:
     # the variable as a tuple 
     screen.blit(newGame, (width/2,height/2))
     screen.blit(gameOver, (width/2, height/2 - 100))
+    pygame.display.update()
+  elif level.running == "victory":
+    print("Victory")
+    screen.fill((60,25,60))
+    screen.blit(bg, bg.get_rect())
+    for ev in pygame.event.get():        
+        if ev.type == pygame.QUIT: 
+            pygame.quit()
+        if ev.type == pygame.MOUSEBUTTONDOWN: 
+              
+            #if the mouse is clicked on the 
+            # button the game is terminated 
+            if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
+                pygame.quit()
+        
+    mouse = pygame.mouse.get_pos()
+    if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
+        pygame.draw.rect(screen,color_light,[width/2,height/2,160,40])       
+    else: 
+        pygame.draw.rect(screen,color_dark,[width/2,height/2,160,40])           
+    # stores the (x,y) coordinates into 
+    # the variable as a tuple 
+    screen.blit(quitText, (width/2 + 40,height/2))
+    screen.blit(victory, (width/2, height/2 - 100))
     pygame.display.update()
   else:
     if level.reset == True:

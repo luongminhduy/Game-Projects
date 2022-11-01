@@ -211,6 +211,7 @@ class Level:
                     print(boss.hp)
                     if (boss.hp < 0):
                         boss.die()
+                        self.running = "victory"
     
     def check_player_falling(self):
         player = self.player.sprite
