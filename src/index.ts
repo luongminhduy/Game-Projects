@@ -1,7 +1,5 @@
 import { Connect4Client } from "./multiplayer-client";
 import { AUTO, Game, Types } from "phaser";
-import { easy, hard, medium } from "./ai/strategies/rules/difficulty";
-import { RuleBasedStrategy } from "./ai/strategies/rules/rule-based-strategy";
 import { AiPlayerController } from "./gui/controllers/ai-player-controller";
 import { HumanPlayerController } from "./gui/controllers/human-player-controller";
 import { MultiplayerOpponentController } from "./gui/controllers/multiplayer-opponent-controller";
@@ -10,24 +8,23 @@ import { MenuScene } from "./gui/scenes/menu-scene";
 import { MultiplayerPlayingScene } from "./gui/scenes/multiplayer-scene";
 import { PlayingScene } from "./gui/scenes/playing-scene";
 import { globalScale } from "./gui/util/scale";
+import { RandomStrategy } from "./ai/random-strategy";
+import { MinimaxStrategy } from "./ai/minimax_strategy";
 
-export const multiplayerServer = "wss://br-connect-4-mp-server.herokuapp.com";
+export const multiplayerServer =
+  "wss://https://kedat-connect4-server.herokuapp.com/";
+// export const multiplayerServer = "ws://192.168.53.145:8000";
 const client: Connect4Client = new Connect4Client();
 const menu = new MenuScene({ key: "menu" });
 const easyScene = new PlayingScene(
   { key: "easy" },
   new HumanPlayerController(),
-  new AiPlayerController(new RuleBasedStrategy(easy, 1500))
+  new AiPlayerController(new RandomStrategy(800))
 );
 const mediumScene = new PlayingScene(
   { key: "medium" },
   new HumanPlayerController(),
-  new AiPlayerController(new RuleBasedStrategy(medium, 1500))
-);
-const hardScene = new PlayingScene(
-  { key: "hard" },
-  new HumanPlayerController(),
-  new AiPlayerController(new RuleBasedStrategy(hard, 1500))
+  new AiPlayerController(new MinimaxStrategy(3000))
 );
 const localScene = new PlayingScene(
   { key: "local" },
@@ -57,7 +54,6 @@ const config: Types.Core.GameConfig = {
     menu,
     easyScene,
     mediumScene,
-    hardScene,
     localScene,
     createMultiplayer,
     joinMultiplayer,

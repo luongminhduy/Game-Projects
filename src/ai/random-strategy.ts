@@ -1,4 +1,4 @@
-import { Constants, Logic, Player } from "../../logics";
+import { Constants, Logic, Player } from "../logics";
 import { Math } from "phaser";
 import { AiStrategy } from "./ai-strategy";
 

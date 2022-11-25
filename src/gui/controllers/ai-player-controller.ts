@@ -1,5 +1,5 @@
 import { Logic, Player } from "../../logics";
-import { AiStrategy } from "../../ai/strategies/ai-strategy";
+import { AiStrategy } from "../../ai/ai-strategy";
 import aiController from "../../assets/ai_controller.png";
 import { PlayerController } from "./player-controller";
 
