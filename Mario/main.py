@@ -186,7 +186,7 @@ while True:
     level.run()
     textKeys = smallfont.render("Keys: ", True, color_dark_1)
     textCoins = smallfont.render("Coins: ", True, color_dark_1)
-    textCuirass = smallfont.render("Cuirasses: ", True, color_dark_1)
+    textCuirass = smallfont.render("Cuirass: ", True, color_dark_1)
     keys = smallfont.render(str(Key.collected_amount), True, color_dark_1)
     coins = smallfont.render(str(Coin.collected_amount), True, color_dark_1)
     cuirass = smallfont.render(str(Cuirass.collected_amount), True, color_dark_1)
