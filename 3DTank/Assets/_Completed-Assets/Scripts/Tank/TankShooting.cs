@@ -20,7 +20,7 @@ namespace Complete
         private string m_FireButton;                // The input axis that is used for launching shells.
         private float m_CurrentLaunchForce;         // The force that will be given to the shell when the fire button is released.
         private float m_ChargeSpeed;                // How fast the launch force increases, based on the max charge time.
-        private bool m_Fired;                       // Whether or not the shell has been launched with this button press.
+        private bool m_Fired;                    // Whether or not the shell has been launched with this button press.
 
 
         private void OnEnable()
@@ -38,14 +38,17 @@ namespace Complete
 
             // The rate that the launch force charges up is the range of possible forces by the max charge time.
             m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
+
+            
         }
 
 
         private void Update ()
         {
+
             // The slider should have a default value of the minimum launch force.
             m_AimSlider.value = m_MinLaunchForce;
-
+        
             // If the max force has been exceeded and the shell hasn't yet been launched...
             if (m_CurrentLaunchForce >= m_MaxLaunchForce && !m_Fired)
             {
@@ -77,6 +80,45 @@ namespace Complete
             {
                 // ... launch the shell.
                 Fire ();
+            }
+
+            if(m_PlayerNumber != 1){
+                int i = 0;
+                GameObject[] m_tanks = GameObject.FindGameObjectsWithTag("Tank");
+                GameObject first_tank = m_tanks[0];
+                foreach(GameObject tank in m_tanks){
+                    if(i == 0) {
+                        i++;
+                        continue;
+                    }
+                    float dist = Vector3.Distance(first_tank.transform.position, tank.transform.position);
+                    Debug.Log(dist);
+                    if (dist <=20f){
+                        // float angle = Quaternion.Angle(first_tank.transform.position, tank.transform.position);
+                       Quaternion targetRotation;
+                       if(transform.position == first_tank.transform.position){
+                            targetRotation = Quaternion.LookRotation(tank.transform.position - transform.position);
+                       }
+                       else{
+                            targetRotation = Quaternion.LookRotation(first_tank.transform.position - transform.position);
+                       }
+                            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime);
+                            transform.position += transform.forward * Time.deltaTime;    
+                        float shot = Random.Range(0f, 200f);
+                        if (shot < 150) {
+                            // Vector3 relative = first_tank.transform.position - tank.transform.position;
+                            // float angle = Mathf.Atan2(relative.x, relative.z) * Mathf.Rad2Deg;
+                            // transform.Rotate(0,angle,0);
+                            // m_Shell.rotation = angle;
+
+                        }
+                        if (shot < 5) {
+                            m_CurrentLaunchForce = m_MaxLaunchForce;
+                            Fire();
+                            Debug.Log("Fire();"); 
+                        }
+                    }
+                }
             }
         }
 

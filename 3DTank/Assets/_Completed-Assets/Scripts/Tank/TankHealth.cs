@@ -5,6 +5,7 @@ namespace Complete
 {
     public class TankHealth : MonoBehaviour
     {
+        public int m_PlayerNumber = 1;
         public float m_StartingHealth = 100f;               // The amount of health each tank starts with.
         public Slider m_Slider;                             // The slider to represent how much health the tank currently has.
         public Image m_FillImage;                           // The image component of the slider.
@@ -86,6 +87,16 @@ namespace Complete
 
             // Turn the tank off.
             gameObject.SetActive (false);
+        }
+
+        private void OnCollisionEnter(Collision other) {
+            if(m_PlayerNumber == 1){
+                if(other.gameObject.tag == "Drug"){
+                    m_CurrentHealth += 100f;
+                    SetHealthUI ();
+                    Destroy(other.gameObject);
+                }
+            }
         }
     }
 }

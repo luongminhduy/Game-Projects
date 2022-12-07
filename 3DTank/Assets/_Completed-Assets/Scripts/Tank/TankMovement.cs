@@ -77,7 +77,6 @@ namespace Complete
             // Store the value of both input axes.
             m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
             m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
-
             EngineAudio ();
         }
 
@@ -136,7 +135,6 @@ namespace Complete
             // Determine the number of degrees to be turned based on the input, speed and time between frames.
             float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
             // Make this into a rotation in the y axis.
-            Debug.Log("turn is " + turn);
             Quaternion turnRotation = Quaternion.Euler (0f, turn, 0f);
 
             // Apply this rotation to the rigidbody's rotation.
@@ -151,10 +149,10 @@ namespace Complete
             m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
         }
 
-        private void EnemyTurn ()
+        private void EnemyTurn (float e)
         {
             // Determine the number of degrees to be turned based on the input, speed and time between frames.
-            float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
+            float turn = e * m_TurnSpeed * Time.deltaTime;
             // Make this into a rotation in the y axis.
             Quaternion turnRotation = Quaternion.Euler (0f, turn, 0f);
 
@@ -165,17 +163,30 @@ namespace Complete
         private void FSM ()
         {
             EnemyMove(way);
+            
         }
 
         private void OnCollisionEnter(Collision other) {
-            if (other.gameObject.name != "GroundPlane") {
+            if (other.gameObject.name != "GroundPlane" && m_PlayerNumber != 1) {
                 collision = true;
                 way = -way;
+                
+
+                EnemyTurn(Random.Range(10f, 200f));
+            }
+        }
+
+        private void OnCollisionStay(Collision other) {
+            if (other.gameObject.name != "GroundPlane" && m_PlayerNumber != 1) {
+                collision = true;
+                way = -way;
+                EnemyTurn(Random.Range(10f, 200f));
             }
         }
         private void OnCollisionExit(Collision other) {
-            if (other.gameObject.name != "GroundPlane") {
+            if (other.gameObject.name != "GroundPlane" && m_PlayerNumber != 1) {
                 collision = false;
+
             }
         }
     }
